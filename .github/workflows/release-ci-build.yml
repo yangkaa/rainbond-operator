@@ -1,8 +1,8 @@
-name: v2.1.0
+name: v2.1.0-dev
 
 on:
   release:
-    branches: [master, release-2.1]
+    branches: [master, release-2.1-dev]
   workflow_dispatch:
 
 jobs:
@@ -32,6 +32,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: registry.cn-hangzhou.aliyuncs.com/goodrain/rainbond-operator:v2.1.0
+          tags: registry.cn-hangzhou.aliyuncs.com/yangkaa/rainbond-operator:v2.1.0-dev
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
