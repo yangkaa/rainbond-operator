@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"os"
 	"path"
@@ -58,9 +59,10 @@ func isUIDBReady(ctx context.Context, cli client.Client, cpt *rainbondv1alpha1.R
 
 	dbcpt := &rainbondv1alpha1.RbdComponent{}
 	if err := cli.Get(ctx, types.NamespacedName{Namespace: cpt.Namespace, Name: DBName}, dbcpt); err != nil {
+		logrus.Infof("get db component: %v", err)
 		return err
 	}
-
+	logrus.Infof("check db [%s] ready replicas [%v] status: [%+v]", DBName, dbcpt.Status.ReadyReplicas, dbcpt.Status)
 	if dbcpt.Status.ReadyReplicas == 0 {
 		return errors.New("no ready replicas for rbdcomponent rbd-db")
 	}
