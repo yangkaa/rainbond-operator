@@ -7,8 +7,6 @@ import (
 	"github.com/docker/docker/api/types"
 	registrytypes "github.com/docker/docker/api/types/registry"
 	"github.com/docker/docker/registry"
-	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 	"net/url"
 	"runtime"
 	"strings"
@@ -97,29 +95,29 @@ func ConfigureAuthentication(authConfig *types.AuthConfig, username, password st
 
 // LoginRepository logs in to a image repository
 func LoginRepository(serverAddress, username, password string) error {
-	ctx := context.Background()
-	isDefaultRegistry := serverAddress == "goodrain.me"
-
-	authConfig, err := GetDefaultAuthConfig(serverAddress, username, password, isDefaultRegistry)
-	if authConfig == nil {
-		authConfig = &types.AuthConfig{ServerAddress: serverAddress}
-	}
-
-	if err == nil && authConfig.Username != "" && authConfig.Password != "" {
-		//login With StoreCreds
-		_, err = loginClientSide(ctx, false, *authConfig)
-	}
-
-	if err != nil || authConfig.Username == "" || authConfig.Password == "" {
-		logrus.Infof("First login failed [%+v], login insecure repository %s with username %s and password %s", err, serverAddress, authConfig.Username, authConfig.Password)
-		err = ConfigureAuthentication(authConfig, username, password)
-		if err != nil {
-			return errors.Wrap(err, "ConfigureAuthentication")
-		}
-		_, err = loginClientSide(ctx, true, *authConfig)
-		if err != nil {
-			return errors.Wrap(err, "loginClientSide")
-		}
-	}
+	//ctx := context.Background()
+	//isDefaultRegistry := serverAddress == "goodrain.me"
+	//
+	//authConfig, err := GetDefaultAuthConfig(serverAddress, username, password, isDefaultRegistry)
+	//if authConfig == nil {
+	//	authConfig = &types.AuthConfig{ServerAddress: serverAddress}
+	//}
+	//
+	//if err == nil && authConfig.Username != "" && authConfig.Password != "" {
+	//	//login With StoreCreds
+	//	_, err = loginClientSide(ctx, false, *authConfig)
+	//}
+	//
+	//if err != nil || authConfig.Username == "" || authConfig.Password == "" {
+	//	logrus.Infof("First login failed [%+v], login insecure repository %s with username %s and password %s", err, serverAddress, authConfig.Username, authConfig.Password)
+	//	err = ConfigureAuthentication(authConfig, username, password)
+	//	if err != nil {
+	//		return errors.Wrap(err, "ConfigureAuthentication")
+	//	}
+	//	_, err = loginClientSide(ctx, true, *authConfig)
+	//	if err != nil {
+	//		return errors.Wrap(err, "loginClientSide")
+	//	}
+	//}
 	return nil
 }
