@@ -7,10 +7,14 @@ DOMESTIC_NAMESPACE=${DOMESTIC_NAMESPACE:-'goodrain'}
 
 imageName=${IMAGE_DOMAIN}/${IMAGE_NAMESPACE}/rainbond-operator:${VERSION}
 docker build -t "${imageName}" -f Dockerfile .
-echo "$DOCKER_PASSWORD" | docker login ${IMAGE_DOMAIN} -u "$DOCKER_USERNAME" --password-stdin
-docker push ${imageName}
+if [ "$2" = "push" ]; then
+  echo "$DOCKER_PASSWORD" | docker login ${IMAGE_DOMAIN} -u "$DOCKER_USERNAME" --password-stdin
+  docker push ${imageName}
+fi
 
-domestcName=${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rainbond-operator:${VERSION}
-docker tag "${imageName}" "${domestcName}"
-echo "${DOMESTIC_DOCKER_PASSWORD}"|docker login -u "${DOMESTIC_DOCKER_USERNAME}" "${DOMESTIC_BASE_NAME}" --password-stdin
-docker push "${domestcName}"
+if [ "${DOMESTIC_BASE_NAME}" ]; then
+  domestcName=${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rainbond-operator:${VERSION}
+  docker tag "${imageName}" "${domestcName}"
+  echo "${DOMESTIC_DOCKER_PASSWORD}"|docker login -u "${DOMESTIC_DOCKER_USERNAME}" "${DOMESTIC_BASE_NAME}" --password-stdin
+  docker push "${domestcName}"
+fi
