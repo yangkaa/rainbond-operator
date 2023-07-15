@@ -12,7 +12,7 @@ if [ "$2" = "push" ]; then
   docker push ${imageName}
 fi
 
-if [ "${DOMESTIC_BASE_NAME}" ]; then
+if [ "${DOMESTIC_DOCKER_USERNAME}" ]; then
   domestcName=${DOMESTIC_BASE_NAME}/${DOMESTIC_NAMESPACE}/rainbond-operator:${VERSION}
   docker tag "${imageName}" "${domestcName}"
   echo "${DOMESTIC_DOCKER_PASSWORD}"|docker login -u "${DOMESTIC_DOCKER_USERNAME}" "${DOMESTIC_BASE_NAME}" --password-stdin
